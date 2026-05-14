@@ -1,0 +1,13 @@
+node_modules
+.next
+.env*.local
+.env.production
+data/quiniela.db
+data/quiniela.db-journal
+data/quiniela.db-wal
+data/quiniela.db-shm
+*.log
+.DS_Store
+tsconfig.tsbuildinfo
+.claude
+.vercel

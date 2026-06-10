@@ -144,7 +144,7 @@ export const MATCHES: MatchSeed[] = [
   { id: 'M104', stage: 'final', group: null, home_team: 'Ganador M101', home_code: 'TBD', away_team: 'Ganador M102', away_code: 'TBD', venue: 'MetLife Stadium, East Rutherford', kickoff_utc: '2026-07-19T19:00:00Z' },
 ];
 
-export const PLAYERS = ['Wunshi', 'La Ciruela', 'La Tlayuda', 'El Fugas', 'El Cuadrado', 'El Patrón'];
+export const PLAYERS = ['Wunshi', 'La Ciruela', 'La Tlayuda', 'El Fugas', 'El Cuadrado'];
 
 export const STAGE_LABELS: Record<Stage, string> = {
   group: 'Fase de grupos',

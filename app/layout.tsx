@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Bebas_Neue, Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { NavBar } from '@/components/NavBar';
+import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister';
 import { getCurrentUser } from '@/lib/auth';
 
 const display = Bebas_Neue({
@@ -17,6 +18,16 @@ export const metadata: Metadata = {
   title: 'La Quiniela de los Amigos del Fugas · Mundial 2026',
   description:
     'La pool de predicciones del Mundial FIFA 2026 entre los amigos del Fugas. Marcador exacto vale 3, ganador vale 1, fallar no vale nada. Que hable el tablero.',
+  applicationName: 'Amigos del Fugas',
+  manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    title: 'Amigos del Fugas',
+    statusBarStyle: 'black-translucent',
+  },
+  formatDetection: {
+    telephone: false,
+  },
   openGraph: {
     title: 'La Quiniela de los Amigos del Fugas · Mundial 2026',
     description: 'Los cuates del Fugas. Un Mundial. Un campeón.',
@@ -50,6 +61,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <NavBar user={user} />
           <main className="relative">{children}</main>
         </div>
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

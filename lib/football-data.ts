@@ -66,7 +66,14 @@ class FootballDataError extends Error {
 }
 
 function token(): string | null {
-  return process.env.FOOTBALL_DATA_TOKEN || null;
+  const t = process.env.FOOTBALL_DATA_TOKEN;
+  if (!t) return null;
+  // Placeholders comunes que no son tokens reales (32 hex chars típicos en FD).
+  const trimmed = t.trim();
+  if (!trimmed) return null;
+  if (/^(PLACEHOLDER|TODO|XXXX|REEMPLAZAR|YOUR_TOKEN)/i.test(trimmed)) return null;
+  if (trimmed.length < 16) return null;
+  return trimmed;
 }
 
 export function isConfigured(): boolean {

@@ -7,6 +7,7 @@ import {
   type Match,
 } from '@/lib/db';
 import {
+  FootballDataError,
   isConfigured,
   listWorldCupMatches,
   normalizeCode,
@@ -138,6 +139,15 @@ export async function GET(request: Request) {
     });
   } catch (e) {
     const err = e as Error;
+    // 403 (token inválido) y 429 (rate limit) son "skipped", no errores reales.
+    if (e instanceof FootballDataError && (e.status === 403 || e.status === 429)) {
+      await logSync({ source: SOURCE, status: 'skipped', message: err.message.slice(0, 240) });
+      return NextResponse.json({
+        ok: false,
+        skipped: true,
+        reason: err.message,
+      });
+    }
     await logSync({
       source: SOURCE,
       status: 'error',

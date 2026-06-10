@@ -102,6 +102,35 @@ export async function adminLogoutAction() {
   redirect('/admin');
 }
 
+/** Server-side admin action — corre el sync internamente con el secret sin exponerlo. */
+export async function runSyncAction(): Promise<
+  | { ok: true; matched: number; updated: number; mapped: number; skipped?: boolean; reason?: string }
+  | { ok: false; error: string }
+> {
+  if (!(await isAdmin())) return { ok: false, error: 'Sesión admin requerida.' };
+
+  // Import dinámico para evitar bundle del cliente
+  const { GET } = await import('@/app/api/cron/sync-results/route');
+  const key = process.env.CRON_SECRET ?? ADMIN_PIN;
+  // Llamamos al handler directamente (in-process) en vez de fetch externo
+  const fakeReq = new Request(`http://internal/api/cron/sync-results?key=${encodeURIComponent(key)}`);
+  const res = await GET(fakeReq);
+  const data = await res.json();
+
+  if (data.skipped) {
+    return { ok: true, matched: 0, updated: 0, mapped: 0, skipped: true, reason: data.reason };
+  }
+  if (!data.ok) return { ok: false, error: data.error ?? 'Error del sync' };
+
+  revalidatePath('/admin');
+  return {
+    ok: true,
+    matched: data.matched ?? 0,
+    updated: data.updated ?? 0,
+    mapped: data.mapped_now ?? 0,
+  };
+}
+
 export async function setResultAction(_: unknown, formData: FormData) {
   if (!(await isAdmin())) return { ok: false, error: 'Sesión admin requerida.' };
 

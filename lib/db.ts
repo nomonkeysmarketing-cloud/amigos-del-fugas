@@ -35,7 +35,18 @@ const SCHEMA = `
     kickoff_utc  TEXT NOT NULL,
     home_score   INTEGER,
     away_score   INTEGER,
-    status       TEXT NOT NULL DEFAULT 'scheduled'
+    status       TEXT NOT NULL DEFAULT 'scheduled',
+    remote_id    INTEGER,
+    source       TEXT
+  );
+  CREATE TABLE IF NOT EXISTS sync_log (
+    id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    ran_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    source      TEXT NOT NULL,
+    status      TEXT NOT NULL,
+    matched     INTEGER NOT NULL DEFAULT 0,
+    updated     INTEGER NOT NULL DEFAULT 0,
+    message     TEXT
   );
   CREATE TABLE IF NOT EXISTS predictions (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -61,12 +72,19 @@ async function ensureInit(): Promise<Client> {
     // libSQL supports multi-statement via executeMultiple (no params)
     await c.executeMultiple(SCHEMA);
 
-    // Migration: add pin_changed for users tables created before that column existed.
-    // Safe to ignore "duplicate column" errors.
-    try {
-      await c.execute("ALTER TABLE users ADD COLUMN pin_changed INTEGER NOT NULL DEFAULT 0");
-    } catch {
-      // column already exists — ignore
+    // Migrations: add columns added after the initial schema.
+    // Each ALTER is wrapped — "duplicate column" errors are expected on re-runs.
+    const migrations = [
+      "ALTER TABLE users   ADD COLUMN pin_changed INTEGER NOT NULL DEFAULT 0",
+      "ALTER TABLE matches ADD COLUMN remote_id INTEGER",
+      "ALTER TABLE matches ADD COLUMN source    TEXT",
+    ];
+    for (const sql of migrations) {
+      try {
+        await c.execute(sql);
+      } catch {
+        // column already exists — ignore
+      }
     }
 
     // Seed players if empty
@@ -149,6 +167,8 @@ export type Match = {
   home_score: number | null;
   away_score: number | null;
   status: 'scheduled' | 'live' | 'final';
+  remote_id: number | null;
+  source: string | null;
 };
 
 export type Prediction = {
@@ -187,6 +207,8 @@ function mapMatch(row: Record<string, unknown>): Match {
     home_score: toNumOrNull(row.home_score),
     away_score: toNumOrNull(row.away_score),
     status: toStr(row.status) as Match['status'],
+    remote_id: toNumOrNull(row.remote_id),
+    source: toStrOrNull(row.source),
   };
 }
 
@@ -322,6 +344,79 @@ export async function changeUserPin(userId: number, newPin: string): Promise<voi
     sql: `UPDATE users SET pin = ?, pin_changed = 1 WHERE id = ?`,
     args: [newPin, userId],
   });
+}
+
+// ============================== Sync helpers ==============================
+
+export async function setMatchRemoteId(matchId: string, remoteId: number, source: string): Promise<void> {
+  const c = await ensureInit();
+  await c.execute({
+    sql: `UPDATE matches SET remote_id = ?, source = ? WHERE id = ?`,
+    args: [remoteId, source, matchId],
+  });
+}
+
+/** Aplica un resultado desde fuente externa SOLO si el partido aún no está finalizado.
+ *  Devuelve true si actualizó, false si lo respetó (manual override). */
+export async function setMatchResultFromSource(
+  matchId: string,
+  homeScore: number,
+  awayScore: number,
+  source: string,
+): Promise<boolean> {
+  const c = await ensureInit();
+  const r = await c.execute({
+    sql: `UPDATE matches
+            SET home_score = ?, away_score = ?, status = 'final', source = ?
+          WHERE id = ?
+            AND status != 'final'`,
+    args: [homeScore, awayScore, source, matchId],
+  });
+  return Number(r.rowsAffected) > 0;
+}
+
+export type SyncLogEntry = {
+  id: number;
+  ran_at: string;
+  source: string;
+  status: string;
+  matched: number;
+  updated: number;
+  message: string | null;
+};
+
+export async function logSync(entry: {
+  source: string;
+  status: 'ok' | 'error' | 'skipped';
+  matched?: number;
+  updated?: number;
+  message?: string;
+}): Promise<void> {
+  const c = await ensureInit();
+  await c.execute({
+    sql: `INSERT INTO sync_log (source, status, matched, updated, message)
+          VALUES (?, ?, ?, ?, ?)`,
+    args: [entry.source, entry.status, entry.matched ?? 0, entry.updated ?? 0, entry.message ?? null],
+  });
+}
+
+export async function lastSync(source: string): Promise<SyncLogEntry | null> {
+  const c = await ensureInit();
+  const r = await c.execute({
+    sql: `SELECT * FROM sync_log WHERE source = ? ORDER BY id DESC LIMIT 1`,
+    args: [source],
+  });
+  if (r.rows.length === 0) return null;
+  const row = r.rows[0] as Record<string, unknown>;
+  return {
+    id: toNum(row.id),
+    ran_at: toStr(row.ran_at),
+    source: toStr(row.source),
+    status: toStr(row.status),
+    matched: toNum(row.matched),
+    updated: toNum(row.updated),
+    message: toStrOrNull(row.message),
+  };
 }
 
 export type LeaderboardRow = {

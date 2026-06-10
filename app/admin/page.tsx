@@ -1,8 +1,10 @@
-import { listMatches, listUsers } from '@/lib/db';
+import { lastSync, listMatches, listUsers } from '@/lib/db';
 import { isAdmin } from '@/lib/auth';
+import { isConfigured as fdConfigured } from '@/lib/football-data';
 import { adminLogoutAction } from '@/app/actions';
 import { AdminGate } from './AdminGate';
 import { AdminMatchRow } from './AdminMatchRow';
+import { SyncCard } from './SyncCard';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +13,12 @@ export default async function AdminPage() {
     return <AdminGate />;
   }
 
-  const [matches, players] = await Promise.all([listMatches(), listUsers()]);
+  const [matches, players, lastFdSync] = await Promise.all([
+    listMatches(),
+    listUsers(),
+    lastSync('football-data.org'),
+  ]);
+  const fdReady = fdConfigured();
 
   return (
     <section className="mx-auto max-w-[1200px] px-4 py-10 md:px-10 md:py-16">
@@ -31,7 +38,10 @@ export default async function AdminPage() {
 
       <p className="mt-5 max-w-[60ch] text-[var(--color-secondary-text)]">
         Cuando termina un partido, mete el marcador final aquí. El tablero se actualiza solo.
+        Si tienes el sync con Football-Data activo, los resultados se aplican solos cada 30 min.
       </p>
+
+      <SyncCard configured={fdReady} last={lastFdSync} />
 
       <div className="surface mt-8 p-5 md:px-6 md:py-4">
         <p className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-muted)]">

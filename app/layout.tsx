@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Bebas_Neue, Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { NavBar } from '@/components/NavBar';
+import { MobileTabBar } from '@/components/MobileTabBar';
 import { ServiceWorkerRegister } from '@/components/ServiceWorkerRegister';
 import { getCurrentUser } from '@/lib/auth';
 
@@ -59,8 +60,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <div className="relative z-10">
           <NavBar user={user} />
-          <main className="relative">{children}</main>
+          <main className="relative pb-24 md:pb-0">{children}</main>
         </div>
+        <MobileTabBar visible={Boolean(user)} />
         <ServiceWorkerRegister />
       </body>
     </html>

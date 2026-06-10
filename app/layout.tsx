@@ -11,9 +11,21 @@ const display = Bebas_Neue({
   weight: '400',
   variable: '--font-bebas',
   display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 });
-const sans = Geist({ subsets: ['latin'], variable: '--font-geist', display: 'swap' });
-const mono = Geist_Mono({ subsets: ['latin'], variable: '--font-geist-mono', display: 'swap' });
+const sans = Geist({
+  subsets: ['latin'],
+  variable: '--font-geist',
+  display: 'swap',
+  preload: true,
+});
+const mono = Geist_Mono({
+  subsets: ['latin'],
+  variable: '--font-geist-mono',
+  display: 'swap',
+  preload: false, // Mono no aparece arriba del fold
+});
 
 export const metadata: Metadata = {
   title: 'La Quiniela de los Amigos del Fugas · Mundial 2026',

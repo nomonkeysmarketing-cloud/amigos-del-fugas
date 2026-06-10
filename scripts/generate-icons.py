@@ -37,8 +37,15 @@ def main():
     }
     for path, size in targets.items():
         path.parent.mkdir(parents=True, exist_ok=True)
-        sq.resize((size, size), Image.LANCZOS).save(path, "PNG", optimize=True)
-        print(f"  wrote {path.relative_to(ROOT)} ({size}x{size})")
+        resized = sq.resize((size, size), Image.LANCZOS)
+        # Compresión adicional: cuantizar a 256 colores indexados (FIFA logo es flat color)
+        # mantiene fidelidad visual pero baja el peso 50-70%.
+        if size <= 256:
+            quant = resized.quantize(colors=256, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+            quant.save(path, "PNG", optimize=True, compress_level=9)
+        else:
+            resized.save(path, "PNG", optimize=True, compress_level=9)
+        print(f"  wrote {path.relative_to(ROOT)} ({size}x{size}) — {path.stat().st_size // 1024}KB")
 
     # Maskable: shrink the logo to ~78% of canvas (safe zone) so Android crops won't
     # clip the trophy. Background = FIFA green so the crop blends naturally.

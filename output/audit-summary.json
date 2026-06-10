@@ -1,0 +1,180 @@
+[
+  {
+    "slug": "landing",
+    "url": "https://amigosdelfugas.vercel.app/",
+    "score": 95,
+    "cwv": {
+      "LCP_ms": 2684.35,
+      "FCP_ms": 1123.35,
+      "TBT_ms": 143,
+      "CLS": 0,
+      "SpeedIndex_ms": 2556.9158817673215,
+      "TTI_ms": 2742.75,
+      "INP_ms_est": null,
+      "TTFB_ms": 61.17700000000002
+    },
+    "bytes": {
+      "totalBytes": 244123,
+      "jsBytes": 118952,
+      "imgBytes": 4199,
+      "fontBytes": 61570
+    },
+    "lcp_element": null,
+    "cls_culprits": [],
+    "render_blocking": [],
+    "unused_js_kb": 0,
+    "third_party_summary": [
+      {
+        "mainThreadTime": 0,
+        "blockingTime": 0,
+        "transferSize": 3141,
+        "tbtImpact": 0,
+        "entity": "flagcdn.com",
+        "subItems": {
+          "type": "subitems",
+          "items": [
+            {
+              "url": "https://flagcdn.com/w160/mx.png",
+              "mainThreadTime": 0,
+              "blockingTime": 0,
+              "transferSize": 1822,
+              "tbtImpact": 0
+            },
+            {
+              "url": "https://flagcdn.com/w160/za.png",
+              "mainThreadTime": 0,
+              "blockingTime": 0,
+              "transferSize": 1319,
+              "tbtImpact": 0
+            }
+          ]
+        }
+      }
+    ],
+    "main_thread_work_ms": 1655.2079999999999,
+    "bootup_time_ms": 661.5560000000008,
+    "finalUrl": "https://amigosdelfugas.vercel.app/"
+  },
+  {
+    "slug": "login",
+    "url": "https://amigosdelfugas.vercel.app/login",
+    "score": 97,
+    "cwv": {
+      "LCP_ms": 2380.5460000000003,
+      "FCP_ms": 1026.546,
+      "TBT_ms": 129,
+      "CLS": 0,
+      "SpeedIndex_ms": 1560.452712697174,
+      "TTI_ms": 2380.5460000000003,
+      "INP_ms_est": null,
+      "TTFB_ms": 62.524
+    },
+    "bytes": {
+      "totalBytes": 238016,
+      "jsBytes": 120390,
+      "imgBytes": 1056,
+      "fontBytes": 61629
+    },
+    "lcp_element": null,
+    "cls_culprits": [],
+    "render_blocking": [],
+    "unused_js_kb": 0,
+    "third_party_summary": [],
+    "main_thread_work_ms": 915.4760000000002,
+    "bootup_time_ms": 316.296,
+    "finalUrl": "https://amigosdelfugas.vercel.app/login"
+  },
+  {
+    "slug": "reglas",
+    "url": "https://amigosdelfugas.vercel.app/reglas",
+    "score": 98,
+    "cwv": {
+      "LCP_ms": 2141.918,
+      "FCP_ms": 962.918,
+      "TBT_ms": 77,
+      "CLS": 0,
+      "SpeedIndex_ms": 1669.6163576736585,
+      "TTI_ms": 2160.418,
+      "INP_ms_est": null,
+      "TTFB_ms": 61.845
+    },
+    "bytes": {
+      "totalBytes": 204315,
+      "jsBytes": 118953,
+      "imgBytes": 1052,
+      "fontBytes": 61628
+    },
+    "lcp_element": null,
+    "cls_culprits": [],
+    "render_blocking": [
+      {
+        "url": "https://amigosdelfugas.vercel.app/_next/static/css/11c9f2d92eed9231.css?dpl=dpl_5g3sT8wMTfkGLVQ5UuLS6MZN3xac",
+        "totalBytes": 9791,
+        "wastedMs": 150
+      }
+    ],
+    "unused_js_kb": 0,
+    "third_party_summary": [],
+    "main_thread_work_ms": 842.4200000000008,
+    "bootup_time_ms": 370.55600000000004,
+    "finalUrl": "https://amigosdelfugas.vercel.app/reglas"
+  },
+  {
+    "slug": "tablero",
+    "url": "https://amigosdelfugas.vercel.app/tablero",
+    "score": 99,
+    "cwv": {
+      "LCP_ms": 2253.2110000000002,
+      "FCP_ms": 972.211,
+      "TBT_ms": 53,
+      "CLS": 0,
+      "SpeedIndex_ms": 1682.589720738019,
+      "TTI_ms": 2283.2610000000004,
+      "INP_ms_est": null,
+      "TTFB_ms": 63.572
+    },
+    "bytes": {
+      "totalBytes": 239778,
+      "jsBytes": 121185,
+      "imgBytes": 1050,
+      "fontBytes": 61629
+    },
+    "lcp_element": null,
+    "cls_culprits": [],
+    "render_blocking": [],
+    "unused_js_kb": 0,
+    "third_party_summary": [],
+    "main_thread_work_ms": 996.7080000000012,
+    "bootup_time_ms": 434.8280000000003,
+    "finalUrl": "https://amigosdelfugas.vercel.app/tablero"
+  },
+  {
+    "slug": "partidos-M01",
+    "url": "https://amigosdelfugas.vercel.app/partidos/M01",
+    "score": 97,
+    "cwv": {
+      "LCP_ms": 2373.264,
+      "FCP_ms": 1035.2640000000001,
+      "TBT_ms": 120,
+      "CLS": 0,
+      "SpeedIndex_ms": 2067.5485617483628,
+      "TTI_ms": 2373.264,
+      "INP_ms_est": null,
+      "TTFB_ms": 66.14399999999999
+    },
+    "bytes": {
+      "totalBytes": 238413,
+      "jsBytes": 120413,
+      "imgBytes": 1050,
+      "fontBytes": 61629
+    },
+    "lcp_element": null,
+    "cls_culprits": [],
+    "render_blocking": [],
+    "unused_js_kb": 0,
+    "third_party_summary": [],
+    "main_thread_work_ms": 932.392,
+    "bootup_time_ms": 301.308,
+    "finalUrl": "https://amigosdelfugas.vercel.app/login"
+  }
+]

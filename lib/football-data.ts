@@ -10,6 +10,7 @@ const FD_TO_OUR: Record<string, string> = {
   ZAF: 'RSA', // Sudáfrica (ISO ZAF / FIFA RSA)
   SAU: 'KSA', // Arabia Saudita
   DZA: 'ALG', // Argelia (algunos FD endpoints usan ALG, otros DZA)
+  URY: 'URU', // Uruguay (ISO URY / FIFA URU) ← confirmado en primer sync
   IRN: 'IRN', // Irán
   COD: 'COD', // RD Congo
   CIV: 'CIV', // Costa de Marfil

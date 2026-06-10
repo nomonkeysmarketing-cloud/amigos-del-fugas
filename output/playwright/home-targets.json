@@ -1,0 +1,52 @@
+[
+  {
+    "tag": "a",
+    "type": "",
+    "text": "Amigos del Fugas",
+    "w": 138,
+    "h": 22,
+    "fontSize": "16px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "a",
+    "type": "",
+    "text": "Entrar",
+    "w": 70,
+    "h": 36,
+    "fontSize": "13px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "a",
+    "type": "",
+    "text": "Entrar a jugar",
+    "w": 129,
+    "h": 44,
+    "fontSize": "14px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "a",
+    "type": "",
+    "text": "Ver reglas →",
+    "w": 125,
+    "h": 44,
+    "fontSize": "14px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "a",
+    "type": "",
+    "text": "Entrar a jugar",
+    "w": 129,
+    "h": 44,
+    "fontSize": "14px",
+    "inputMode": "",
+    "autocomplete": ""
+  }
+]

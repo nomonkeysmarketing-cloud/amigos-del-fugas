@@ -50,7 +50,7 @@ export default async function MatchDetailPage({
         : 'scheduled';
 
   return (
-    <section className="mx-auto max-w-[1080px] px-6 py-10 md:px-10 md:py-16">
+    <section className="mx-auto max-w-[1080px] px-4 py-8 md:px-10 md:py-16">
       <Link href="/partidos" className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-muted)] hover:text-[var(--color-text)] transition">
         ← Volver a partidos
       </Link>
@@ -65,35 +65,35 @@ export default async function MatchDetailPage({
       </header>
 
       {/* Match hero */}
-      <div className="surface mt-6 p-8 md:p-12">
-        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-6">
-          <div className="flex flex-col items-center gap-3 text-center">
-            <FlagBadge code={match.home_code} name={match.home_team} size={72} />
-            <h2 className="display text-[clamp(24px,3vw,40px)] leading-none">{match.home_team}</h2>
-            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-muted)]">
+      <div className="surface mt-6 p-5 md:p-12">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 md:gap-6">
+          <div className="flex min-w-0 flex-col items-center gap-3 text-center">
+            <FlagBadge code={match.home_code} name={match.home_team} size={56} />
+            <h2 className="display text-[clamp(20px,5vw,40px)] leading-[0.95] line-clamp-2">{match.home_team}</h2>
+            <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-muted)]">
               {match.home_code === 'TBD' ? '—' : match.home_code}
             </span>
           </div>
 
-          <div className="flex flex-col items-center justify-center gap-3">
+          <div className="flex shrink-0 flex-col items-center justify-center gap-3">
             {isFinal ? (
-              <span className="mono text-[64px] font-medium leading-none tabular-nums score-pop">
+              <span className="mono text-[clamp(36px,10vw,64px)] font-medium leading-none tabular-nums score-pop">
                 {match.home_score}
-                <span className="px-3 text-[var(--color-muted)]">·</span>
+                <span className="px-2 text-[var(--color-muted)] md:px-3">·</span>
                 {match.away_score}
               </span>
             ) : (
               <>
-                <span className="display text-[40px] leading-none text-[var(--color-muted)]">VS</span>
+                <span className="display text-[clamp(28px,7vw,40px)] leading-none text-[var(--color-muted)]">VS</span>
                 {!locked && <CountdownTimer targetUtc={match.kickoff_utc} />}
               </>
             )}
           </div>
 
-          <div className="flex flex-col items-center gap-3 text-center">
-            <FlagBadge code={match.away_code} name={match.away_team} size={72} />
-            <h2 className="display text-[clamp(24px,3vw,40px)] leading-none">{match.away_team}</h2>
-            <span className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--color-muted)]">
+          <div className="flex min-w-0 flex-col items-center gap-3 text-center">
+            <FlagBadge code={match.away_code} name={match.away_team} size={56} />
+            <h2 className="display text-[clamp(20px,5vw,40px)] leading-[0.95] line-clamp-2">{match.away_team}</h2>
+            <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-muted)]">
               {match.away_code === 'TBD' ? '—' : match.away_code}
             </span>
           </div>
@@ -103,7 +103,7 @@ export default async function MatchDetailPage({
           <p className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-muted)]">
             Kickoff (CDMX)
           </p>
-          <p className="mono text-[18px] tabular-nums">
+          <p className="text-[18px] font-medium leading-tight">
             {new Date(match.kickoff_utc).toLocaleString('es-MX', {
               timeZone: 'America/Mexico_City',
               weekday: 'long',

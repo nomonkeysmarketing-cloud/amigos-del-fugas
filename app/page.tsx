@@ -28,7 +28,7 @@ export default async function HomePage() {
       </div>
 
       {/* HERO */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-x-clip overflow-y-visible">
         <div className="field-grid pointer-events-none absolute inset-0 opacity-50" aria-hidden />
         {/* Giant outline 26 */}
         <span
@@ -261,7 +261,7 @@ export default async function HomePage() {
         <div className="border-t border-[var(--color-border)]">
           <div className="mx-auto flex max-w-[1320px] flex-col items-center justify-between gap-2 px-6 py-6 text-[12px] text-[var(--color-muted)] md:flex-row md:px-10">
             <span>La Quiniela de los Amigos del Fugas · Mundial FIFA 2026</span>
-            <span className="mono">EL QUE LA ACIERTA, SE LA LLEVA.</span>
+            <span className="mono">11 JUN · KICKOFF</span>
           </div>
         </div>
       </section>

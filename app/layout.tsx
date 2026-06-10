@@ -60,7 +60,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <div className="relative z-10">
           <NavBar user={user} />
-          <main className="relative pb-24 md:pb-0">{children}</main>
+          <main
+            className="relative md:pb-0"
+            style={{ paddingBottom: user ? 'calc(80px + env(safe-area-inset-bottom))' : '0' }}
+          >
+            {children}
+          </main>
         </div>
         <MobileTabBar visible={Boolean(user)} />
         <ServiceWorkerRegister />

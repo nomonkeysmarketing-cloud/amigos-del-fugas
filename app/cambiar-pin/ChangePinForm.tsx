@@ -22,7 +22,7 @@ export function ChangePinForm() {
           maxLength={4}
           autoComplete="new-password"
           placeholder="••••"
-          className="mt-3 block w-full mono text-center text-[28px] tracking-[0.5em]"
+          className="mt-3 block w-full mono text-center text-[28px] tracking-[0.25em]"
           required
         />
       </div>
@@ -39,7 +39,7 @@ export function ChangePinForm() {
           maxLength={4}
           autoComplete="new-password"
           placeholder="••••"
-          className="mt-3 block w-full mono text-center text-[28px] tracking-[0.5em]"
+          className="mt-3 block w-full mono text-center text-[28px] tracking-[0.25em]"
           required
         />
       </div>

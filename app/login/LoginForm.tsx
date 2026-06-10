@@ -21,10 +21,10 @@ export function LoginForm({ players }: { players: string[] }) {
               key={p}
               type="button"
               onClick={() => setSelected(p)}
-              className={`rounded-[12px] border px-3 py-3 text-[13px] font-medium transition ${
+              className={`rounded-[12px] border px-3 py-4 text-[13px] font-medium transition active:scale-[0.97] ${
                 selected === p
                   ? 'border-[var(--color-primary)] bg-[var(--color-primary)]/10 text-[var(--color-primary)]'
-                  : 'border-[var(--color-border)] text-[var(--color-secondary-text)] hover:border-[var(--color-border-strong)] hover:text-[var(--color-text)]'
+                  : 'border-[var(--color-border)] text-[var(--color-secondary-text)] hover:border-[var(--color-border-strong)] hover:text-[var(--color-text)] active:bg-[var(--color-primary)]/[0.06]'
               }`}
             >
               {p}
@@ -42,16 +42,20 @@ export function LoginForm({ players }: { players: string[] }) {
           type="password"
           name="pin"
           inputMode="numeric"
+          pattern="\d{4}"
+          maxLength={4}
           autoComplete="off"
-          maxLength={6}
           placeholder="••••"
-          className="mt-3 block w-full mono text-center text-[24px] tracking-[0.4em]"
+          className="mt-3 block w-full mono text-center text-[26px] tracking-[0.25em]"
           required
         />
       </div>
 
       {state?.error && (
-        <p className="rounded-[10px] border border-[var(--color-danger)]/40 bg-[var(--color-danger)]/10 px-4 py-3 text-[13px] text-[var(--color-danger)]">
+        <p
+          role="alert"
+          className="rounded-[10px] border border-[var(--color-danger)]/40 bg-[var(--color-danger)]/10 px-4 py-3 text-[13px] text-[var(--color-danger)]"
+        >
           {state.error}
         </p>
       )}

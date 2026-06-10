@@ -11,7 +11,7 @@ import {
   setMatchResult,
   upsertPrediction,
 } from '@/lib/db';
-import { SESSION_COOKIE, ADMIN_PIN, getCurrentUser } from '@/lib/auth';
+import { SESSION_COOKIE, ADMIN_COOKIE, ADMIN_PIN, getCurrentUser, isAdmin } from '@/lib/auth';
 
 export async function loginAction(_: unknown, formData: FormData) {
   const name = String(formData.get('name') ?? '').trim();
@@ -83,9 +83,27 @@ export async function savePredictionAction(_: unknown, formData: FormData) {
   return { ok: true, message: '¡Pronóstico guardado! Que ruede el balón.' };
 }
 
+export async function adminLoginAction(_: unknown, formData: FormData) {
+  const pin = String(formData.get('admin_pin') ?? '').trim();
+  if (pin !== ADMIN_PIN) return { ok: false, error: 'PIN admin incorrecto.' };
+  const jar = await cookies();
+  jar.set(ADMIN_COOKIE, pin, {
+    httpOnly: true,
+    sameSite: 'lax',
+    maxAge: 60 * 60 * 6, // 6 horas de sesión
+    path: '/',
+  });
+  redirect('/admin');
+}
+
+export async function adminLogoutAction() {
+  const jar = await cookies();
+  jar.delete(ADMIN_COOKIE);
+  redirect('/admin');
+}
+
 export async function setResultAction(_: unknown, formData: FormData) {
-  const adminPin = String(formData.get('admin_pin') ?? '').trim();
-  if (adminPin !== ADMIN_PIN) return { ok: false, error: 'PIN admin incorrecto.' };
+  if (!(await isAdmin())) return { ok: false, error: 'Sesión admin requerida.' };
 
   const matchId = String(formData.get('match_id') ?? '');
   const home = formData.get('home_score');

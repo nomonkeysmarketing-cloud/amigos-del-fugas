@@ -1,0 +1,112 @@
+[
+  {
+    "tag": "a",
+    "type": "",
+    "text": "Amigos del Fugas",
+    "w": 138,
+    "h": 22,
+    "fontSize": "16px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "a",
+    "type": "",
+    "text": "Entrar",
+    "w": 70,
+    "h": 36,
+    "fontSize": "13px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "label",
+    "type": "",
+    "text": "Jugador",
+    "w": 55,
+    "h": 13,
+    "fontSize": "10px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "button",
+    "type": "button",
+    "text": "Wunshi",
+    "w": 167,
+    "h": 46,
+    "fontSize": "13px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "button",
+    "type": "button",
+    "text": "La Ciruela",
+    "w": 167,
+    "h": 46,
+    "fontSize": "13px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "button",
+    "type": "button",
+    "text": "La Tlayuda",
+    "w": 167,
+    "h": 46,
+    "fontSize": "13px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "button",
+    "type": "button",
+    "text": "El Fugas",
+    "w": 167,
+    "h": 46,
+    "fontSize": "13px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "button",
+    "type": "button",
+    "text": "El Cuadrado",
+    "w": 167,
+    "h": 46,
+    "fontSize": "13px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "label",
+    "type": "",
+    "text": "PIN",
+    "w": 23,
+    "h": 13,
+    "fontSize": "10px",
+    "inputMode": "",
+    "autocomplete": ""
+  },
+  {
+    "tag": "input",
+    "type": "password",
+    "text": "••••",
+    "w": 342,
+    "h": 62,
+    "fontSize": "24px",
+    "inputMode": "numeric",
+    "autocomplete": "off"
+  },
+  {
+    "tag": "button",
+    "type": "submit",
+    "text": "Entrar a la cancha",
+    "w": 342,
+    "h": 44,
+    "fontSize": "14px",
+    "inputMode": "",
+    "autocomplete": ""
+  }
+]

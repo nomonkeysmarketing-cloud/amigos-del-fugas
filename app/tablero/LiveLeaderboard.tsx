@@ -70,9 +70,11 @@ export function LiveLeaderboard({ initial, meId }: Props) {
           const rankColor =
             i === 0
               ? 'text-[var(--color-gold)]'
-              : i < 3
-                ? 'text-[var(--color-primary)]'
-                : 'text-[var(--color-muted)]';
+              : i === 1
+                ? 'text-[var(--color-secondary-text)]'
+                : i === 2
+                  ? 'text-[#cd7f32]' // bronce
+                  : 'text-[var(--color-muted)]';
 
           return (
             <div
@@ -182,12 +184,18 @@ function Avatar({ seed }: { seed: string }) {
     .map((p) => p[0]?.toUpperCase() ?? '')
     .join('')
     .slice(0, 2);
-  const h = Array.from(seed).reduce((a, c) => a + c.charCodeAt(0), 0);
-  const palette = ['var(--color-primary)', 'var(--color-gold)', 'var(--color-magenta)', '#7a8c82'];
-  const bg = palette[h % palette.length];
+  // Asignamos por seed exacto a una paleta de 5 tonos distintos (evita colisiones)
+  const palette: Record<string, string> = {
+    wunshi: '#00d86b',         // primary
+    'la-ciruela': '#ff1f6d',   // magenta
+    'la-tlayuda': '#ffc93c',   // gold
+    'el-fugas': '#5dcaf0',     // cyan
+    'el-cuadrado': '#c8a2ff',  // lila
+  };
+  const bg = palette[seed] ?? '#7a8c82';
   return (
     <div
-      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[12px] font-semibold text-[#0a1f14] ring-1 ring-black/20"
+      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-[12px] font-semibold text-[#0a1f14] ring-1 ring-black/30"
       style={{ background: bg }}
     >
       {initials}

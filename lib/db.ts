@@ -285,6 +285,62 @@ export async function getPredictionsForUser(userId: number): Promise<Map<string,
   return map;
 }
 
+export type PredictionWithMatch = {
+  match: Match;
+  prediction: Prediction;
+};
+
+/** Devuelve todas las predicciones de un usuario, joined con su partido,
+ *  ordenadas por kickoff descendente (más reciente primero). */
+export async function getPredictionHistoryForUser(userId: number): Promise<PredictionWithMatch[]> {
+  const c = await ensureInit();
+  const r = await c.execute({
+    sql: `
+      SELECT
+        p.id AS p_id, p.user_id, p.match_id, p.home_score AS p_home, p.away_score AS p_away,
+        p.created_at AS p_created, p.updated_at AS p_updated,
+        m.id AS m_id, m.stage, m.grp, m.home_team, m.home_code, m.away_team, m.away_code,
+        m.venue, m.kickoff_utc, m.home_score AS m_home, m.away_score AS m_away, m.status,
+        m.remote_id, m.source
+      FROM predictions p
+      JOIN matches m ON m.id = p.match_id
+      WHERE p.user_id = ?
+      ORDER BY m.kickoff_utc DESC
+    `,
+    args: [userId],
+  });
+  return r.rows.map((row) => {
+    const o = row as Record<string, unknown>;
+    return {
+      prediction: {
+        id: toNum(o.p_id),
+        user_id: toNum(o.user_id),
+        match_id: toStr(o.match_id),
+        home_score: toNum(o.p_home),
+        away_score: toNum(o.p_away),
+        created_at: toStr(o.p_created),
+        updated_at: toStr(o.p_updated),
+      },
+      match: {
+        id: toStr(o.m_id),
+        stage: toStr(o.stage),
+        grp: toStrOrNull(o.grp),
+        home_team: toStr(o.home_team),
+        home_code: toStr(o.home_code),
+        away_team: toStr(o.away_team),
+        away_code: toStr(o.away_code),
+        venue: toStr(o.venue),
+        kickoff_utc: toStr(o.kickoff_utc),
+        home_score: toNumOrNull(o.m_home),
+        away_score: toNumOrNull(o.m_away),
+        status: toStr(o.status) as Match['status'],
+        remote_id: toNumOrNull(o.remote_id),
+        source: toStrOrNull(o.source),
+      },
+    };
+  });
+}
+
 export async function getPredictionsForMatch(matchId: string): Promise<Prediction[]> {
   const c = await ensureInit();
   const r = await c.execute({
@@ -292,6 +348,20 @@ export async function getPredictionsForMatch(matchId: string): Promise<Predictio
     args: [matchId],
   });
   return r.rows.map((row) => mapPrediction(row as Record<string, unknown>));
+}
+
+/** Devuelve TODAS las predicciones del torneo, indexadas por match_id. */
+export async function getAllPredictionsByMatch(): Promise<Map<string, Prediction[]>> {
+  const c = await ensureInit();
+  const r = await c.execute('SELECT * FROM predictions');
+  const map = new Map<string, Prediction[]>();
+  for (const row of r.rows) {
+    const p = mapPrediction(row as Record<string, unknown>);
+    const arr = map.get(p.match_id) ?? [];
+    arr.push(p);
+    map.set(p.match_id, arr);
+  }
+  return map;
 }
 
 export async function upsertPrediction(

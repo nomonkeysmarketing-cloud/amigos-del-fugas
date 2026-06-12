@@ -27,6 +27,7 @@ export function NavBar({ user }: { user: UserPublic | null }) {
         <ul className="hidden flex-1 items-center justify-center gap-1 md:flex">
           <NavLink href="/partidos">Cancha</NavLink>
           <NavLink href="/tablero">El Tablero</NavLink>
+          <NavLink href="/historial">Historial</NavLink>
           <NavLink href="/reglas">Reglas</NavLink>
         </ul>
 

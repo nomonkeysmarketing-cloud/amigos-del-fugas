@@ -17,7 +17,7 @@ export default async function TableroPage() {
             <span className="text-[var(--color-primary)]">no miente.</span>
           </h1>
           <p className="mt-5 max-w-[44ch] text-[var(--color-secondary-text)]">
-            Posiciones, aciertos exactos y atinadas al ganador. Se actualiza solo cada 5 segundos.
+            Posiciones, aciertos exactos y atinadas al ganador. Tap a cualquier cuate para ver su historial. Se actualiza solo cada 5 segundos.
           </p>
         </div>
         <div className="flex items-center gap-2 self-start md:self-end">

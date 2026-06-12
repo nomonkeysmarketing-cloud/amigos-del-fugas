@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
 import type { LeaderboardRow } from '@/lib/db';
 
@@ -77,12 +78,14 @@ export function LiveLeaderboard({ initial, meId }: Props) {
                   : 'text-[var(--color-muted)]';
 
           return (
-            <div
+            <Link
               key={row.user_id}
-              className={`relative border-b border-[var(--color-border)]/60 px-4 py-4 transition-all duration-300 last:border-b-0 md:grid md:grid-cols-[56px_1fr_80px_88px_72px] md:items-center md:gap-4 md:px-6 md:py-5 ${
+              href={`/jugador/${row.user_id}`}
+              className={`relative block border-b border-[var(--color-border)]/60 px-4 py-4 transition-all duration-300 last:border-b-0 active:bg-white/[0.03] hover:bg-white/[0.02] md:grid md:grid-cols-[56px_1fr_80px_88px_72px] md:items-center md:gap-4 md:px-6 md:py-5 ${
                 isMe ? 'bg-[var(--color-primary)]/[0.05]' : ''
               } ${isFlashing ? 'bg-[var(--color-primary)]/12' : ''}`}
               style={isMe ? { boxShadow: 'inset 4px 0 0 var(--color-primary)' } : undefined}
+              aria-label={`Ver historial de ${row.name}`}
             >
               {/* MOBILE: 3-col layout — [rank] [name+stats] [pts] */}
               <div className="grid grid-cols-[40px_1fr_auto] items-center gap-3 md:contents">
@@ -162,7 +165,7 @@ export function LiveLeaderboard({ initial, meId }: Props) {
               >
                 {row.total}
               </span>
-            </div>
+            </Link>
           );
         })}
         {rows.length === 0 && (

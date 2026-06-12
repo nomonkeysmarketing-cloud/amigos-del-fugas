@@ -157,42 +157,115 @@ export default async function MatchDetailPage({
         </div>
       )}
 
-      {/* Otras jugadas */}
-      {showOthers && allPredictions.length > 0 && (
+      {/* Otras jugadas — visible cuando el partido está cerrado o finalizado */}
+      {showOthers && (
         <div className="mt-12">
-          <p className="eyebrow">Jugadas del grupo</p>
+          <p className="eyebrow">{isFinal ? 'Marcador final · Jugadas' : 'Predicciones reveladas'}</p>
           <h3 className="display mt-3 text-[clamp(28px,3vw,40px)] leading-[0.95]">
-            ¿Quién la <span className="text-[var(--color-primary)]">clavó</span>?
+            {isFinal ? (
+              <>¿Quién la <span className="text-[var(--color-primary)]">clavó</span>?</>
+            ) : (
+              <>Cartas <span className="text-[var(--color-primary)]">sobre la mesa</span>.</>
+            )}
           </h3>
-          <div className="surface mt-6 overflow-hidden">
-            <header className="grid grid-cols-[1fr_auto_auto] items-center gap-4 border-b border-[var(--color-border)] px-6 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-muted)]">
-              <span>Jugador</span>
-              <span>Marcador</span>
-              <span>Pts</span>
-            </header>
-            {allPredictions.map((p) => {
-              const u = usersById.get(p.user_id);
-              const points = isFinal
-                ? calcPoints(p.home_score, p.away_score, match.home_score!, match.away_score!)
-                : null;
-              return (
-                <div
-                  key={p.id}
-                  className="grid grid-cols-[1fr_auto_auto] items-center gap-4 border-b border-[var(--color-border)]/60 px-6 py-4 last:border-b-0"
-                >
-                  <span className="text-[14px] font-medium">{u?.name ?? '—'}</span>
-                  <span className="mono text-[18px] tabular-nums">
-                    {p.home_score}·{p.away_score}
-                  </span>
-                  <span className="min-w-[64px] text-right">
-                    {points !== null ? <PointsBadge points={points} /> : <span className="text-[var(--color-muted)] text-[12px]">—</span>}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+          <p className="mt-3 max-w-[44ch] text-[var(--color-secondary-text)]">
+            {isFinal
+              ? 'Esto es lo que apostó cada cuate y los puntos que se llevaron.'
+              : 'El candado bajó. Estos son los marcadores que metió cada quien.'}
+          </p>
+
+          {(() => {
+            // Combina users con predictions; los que no jugaron aparecen al final.
+            const predsByUser = new Map(allPredictions.map((p) => [p.user_id, p]));
+            const rows = usersList.map((u) => {
+              const p = predsByUser.get(u.id);
+              const points =
+                p && isFinal
+                  ? calcPoints(p.home_score, p.away_score, match.home_score!, match.away_score!)
+                  : null;
+              return { user: u, prediction: p ?? null, points };
+            });
+            // Sort: finalized -> by points desc; otherwise by user id (predictions first)
+            rows.sort((a, b) => {
+              if (isFinal) {
+                return (b.points ?? -1) - (a.points ?? -1);
+              }
+              // No final: los que jugaron primero, luego los flojos
+              const ap = a.prediction ? 0 : 1;
+              const bp = b.prediction ? 0 : 1;
+              if (ap !== bp) return ap - bp;
+              return a.user.id - b.user.id;
+            });
+
+            return (
+              <div className="surface mt-6 overflow-hidden">
+                {rows.map(({ user: u, prediction: p, points }) => {
+                  const isMe = u.id === user.id;
+                  return (
+                    <div
+                      key={u.id}
+                      className={`grid grid-cols-[1fr_auto_60px] items-center gap-3 border-b border-[var(--color-border)]/60 px-4 py-3.5 last:border-b-0 md:px-6 md:py-4 ${
+                        isMe ? 'bg-[var(--color-primary)]/[0.05]' : ''
+                      }`}
+                      style={isMe ? { boxShadow: 'inset 3px 0 0 var(--color-primary)' } : undefined}
+                    >
+                      <div className="flex min-w-0 items-center gap-3">
+                        <PlayerDot seed={u.avatar_seed} initial={u.name.slice(0, 1)} />
+                        <span className="truncate text-[14px] font-medium">
+                          {u.name}
+                          {isMe && (
+                            <span className="ml-2 mono text-[9px] uppercase tracking-[0.18em] text-[var(--color-primary)]">
+                              TÚ
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                      {p ? (
+                        <span className="mono text-[18px] tabular-nums">
+                          {p.home_score}
+                          <span className="px-1 text-[var(--color-muted)]">·</span>
+                          {p.away_score}
+                        </span>
+                      ) : (
+                        <span className="mono text-[10px] uppercase tracking-[0.18em] text-[var(--color-muted)]">
+                          No jugó
+                        </span>
+                      )}
+                      <div className="flex justify-end">
+                        {points !== null ? (
+                          <PointsBadge points={points} />
+                        ) : (
+                          <span className="text-[12px] text-[var(--color-muted)]">—</span>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })()}
         </div>
       )}
     </section>
+  );
+}
+
+const AVATAR_PALETTE: Record<string, string> = {
+  wunshi: '#00d86b',
+  'la-ciruela': '#ff1f6d',
+  'la-tlayuda': '#ffc93c',
+  'el-fugas': '#5dcaf0',
+  'el-cuadrado': '#c8a2ff',
+};
+
+function PlayerDot({ seed, initial }: { seed: string; initial: string }) {
+  const bg = AVATAR_PALETTE[seed] ?? '#7a8c82';
+  return (
+    <div
+      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold text-[#0a1f14] ring-1 ring-black/30"
+      style={{ background: bg }}
+    >
+      {initial}
+    </div>
   );
 }

@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 const TABS = [
   { href: '/partidos', label: 'Cancha', icon: 'pitch' },
   { href: '/tablero', label: 'Tablero', icon: 'trophy' },
+  { href: '/historial', label: 'Historial', icon: 'history' },
   { href: '/reglas', label: 'Reglas', icon: 'rules' },
 ] as const;
 
@@ -84,6 +85,14 @@ function TabIcon({ name, active }: { name: IconName; active: boolean }) {
           />
           <path d="M10 14h4l1 6H9l1-6Z" stroke={stroke} strokeWidth="1.5" strokeLinejoin="round" />
           <path d="M8 20h8" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      );
+    case 'history':
+      return (
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <circle cx="12" cy="12" r="9" stroke={stroke} strokeWidth="1.5" />
+          <path d="M12 7v5l3 2" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M3 12a9 9 0 0 1 3-6.7" stroke={stroke} strokeWidth="1.5" strokeLinecap="round" />
         </svg>
       );
     case 'rules':
